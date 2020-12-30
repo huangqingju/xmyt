@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/include :: header"></head>
+<body>
+<div class="layui-form" lay-filter="form">
+    <input type="hidden" name="id" th:value="${sysUser.id}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名：</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" name="username" th:value="${sysUser.username}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码：</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" name="password" th:value="${sysUser.password}" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否可用：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="status" value="1" title="可用" th:checked="${sysUser.status eq 1}">
+            <input type="radio" name="status" value="0" title="停用" th:checked="${sysUser.status eq 0}">
+        </div>
+    </div>
+    <div  class="layui-form-item">
+        <div class="layui-input-block">
+
+            <input id="formSubmit" type="button" class="layui-btn layui-btn-sm layui-btn-normal" value="提交">
+            <!-- <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>-->
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</div>
+</body>
+<script th:inline="javascript">
+    layui.use(['layer','form'],function () {
+        var layer=layui.layer;
+        var form =layui.form;
+        var $=layui.jquery;
+
+        $("#formSubmit").click(function(){
+           var formData = form.val("form");
+           $.ajax({
+               url:ctx+"sys/userManage/addOrEdit",
+               type:"post",
+               data:formData,
+               dataType:"json",
+               success:function (res) {
+
+               }
+           })
+
+        });
+    })
+
+</script>
+</html>

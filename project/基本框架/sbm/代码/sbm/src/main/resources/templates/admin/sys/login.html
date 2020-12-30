@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/include :: header"></head>
+<body>
+    <div class="layui-container">
+        <div class="layui-row">
+            <div class="layui-col-md4 layui-col-md-offset4 layui-col-lg4 layui-col-lg-offset4">
+                <h3>后台登录页面</h3>
+            </div>
+
+        </div>
+
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="" id="username" placeholder="请输入" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="" id="password" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input class="layui-btn" lay-filter="formDemo" id="submit" value="立即提交"></input>
+                    <input type="reset" class="layui-btn layui-btn-primary" value="重置"></input>
+                </div>
+            </div>
+        </form>
+    </div>
+
+<script th:inline="javascript">
+
+    $(function () {
+        $("#submit").click(function(){
+            $.ajax({
+                url:"/sys/system/login.json",
+                type:"POST",
+                data:{username:$("#username").val(),
+                    password:$("#password").val()
+                },
+                dataType:"json",
+                success:function (res) {
+                    if(res.success){
+                        window.location.href=ctx+'sys/index/main';
+                    }else{
+                        alert(res.message);
+                    }
+
+                    //window.location.href=ctx+'sys/excel/init'
+                },
+                error:function (res) {
+                    alert(res);
+                }
+            });
+        });
+    });
+
+    layui.use(['form','jquery'],function () {
+         var  $ = layui.jquery;
+         var form = layui.form;
+
+
+
+    })
+
+</script>
+
+</body>
+</html>

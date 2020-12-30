@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/include :: header" ></head>
+<body>
+    <form class="layui-form" style="width: 95%;margin-top: 10px;" id="form">
+        <input type="hidden" name="id" th:value="${category.id}">
+       <div class="layui-form-item">
+           <label class="layui-form-label">上一级：</label>
+           <div class="layui-input-block">
+               <input type="hidden" name="parentId" th:value="${category.parentId}">
+               <input class="layui-input" th:value="${category.parTitle}" readonly="readonly" >
+           </div>
+       </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类别名称：</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="id" th:value="${category.id}">
+                <input class="layui-input" name="name" th:value="${category.name}" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否显示：</label>
+            <div class="layui-input-block">
+                <!--<input type="checkbox"  name="display"  lay-filter="switchDisplay" lay-skin="switch" lay-text="是|否" th:checked="${category.display eq 1}" th:value="${category.display}" >-->
+                <input type="radio"  name="display"   lay-skin="switch" title="是" th:checked="${category.display eq 1}" value="1" >
+                <input type="radio"  name="display"   lay-skin="switch" title="否" th:checked="${category.display eq 0}" value="0" >
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序值：</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="sort" placeholder="排序值越小越靠前" th:value="${category.sort}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="button" class="layui-btn" id="formDemo" value="立即提交"></input>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+
+    </form>
+    <script th:inline="javascript">
+        layui.use(['form','layer','laydate'],function(){
+            var form = layui.form;
+            var laydate  = layui.laydate;
+            var $ = layui.jquery;
+            var layer = layui.layer;
+
+            form.on('switch(switchDisplay)',function (data) {
+                console.log(data);
+                if(data.elem.checked){
+                    data.elem.value=1;
+                }else {
+                    data.elem.value=0;
+                }
+                form.render();
+            });
+
+            $("#formDemo").click(function () {
+                $.ajax({
+                    url:ctx+"sys/category/addOrEdit",
+                    type:"post",
+                    data:$("#form").serialize(),
+                    dataType:"json",
+                    success:function(res){
+                        var index1 = layer.open({
+                            title:'提示',
+                            content:res.message,
+                            btn:['知道了'],
+                            btn1:function () {
+                                if(res.success){
+                                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                    parent.layer.close(index); //再执行关闭
+                                }else{
+                                    layer.close(index1);
+                                }
+                            }
+                        });
+
+
+                    }
+                });
+            })
+
+            // form.on('submit(formDemo)',function(data){
+            //
+            //     $.ajax({
+            //         url:ctx+"sys/category/addOrEdit",
+            //         type:"post",
+            //         data:data.field,
+            //         dataType:"json",
+            //         success:function(res){
+            //             console.log();
+            //         }
+            //     });
+            // });
+
+            laydate.render({
+                elem:'#date',
+                format:'yyyy-MM-dd',
+                value:new Date()
+            });
+
+            laydate.render({
+                elem:'#month',
+                format:'MM',
+                value:new Date()
+            });
+
+            laydate.render({
+                elem:'#year',
+                type:'year',
+                value:new Date()
+            });
+            /*laydate.render({
+                elem:'#applyYear',
+                type:'year',
+                value:new Date()
+            });laydate.render({
+                elem:'#applyMonth',
+                type:'MM',
+                value:new Date()
+            });*/
+        });
+    </script>
+</body>
+</html>

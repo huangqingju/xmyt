@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/include :: header"></head>
+<body>
+<div class="layui-form" lay-filter="form">
+    <input type="hidden" name="id" th:value="${sysMenu.id}">
+    <input type="hidden" name="parentId" th:value="${sysMenu.parentId}">
+    <div class="layui-form-item" style="margin-top: 5px">
+        <label class="layui-form-label">菜单：</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" name="menuName" th:value="${sysMenu.menuName}">
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label">菜单名：</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" name="adminDataText" th:value="${sysMenu.adminDataText}">
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label">app路径：</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" name="appHref" th:value="${sysMenu.appHref}">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item" >
+        <label class="layui-form-label">admin路径：</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" name="adminDataUrl" th:value="${sysMenu.adminDataUrl}">
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label">类别ID：</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" name="resCode" th:value="${sysMenu.resCode}">
+        </div>
+    </div> <div class="layui-form-item" >
+    <label class="layui-form-label">菜单编号：</label>
+    <div class="layui-input-inline">
+        <input class="layui-input" name="adminDataId" th:value="${sysMenu.adminDataId}">
+    </div>
+</div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label">排序：</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" name="sorted" th:value="${sysMenu.sorted}">
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label">显示：</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="display" value="1" title="显示" th:checked="${sysMenu.display eq 1}">
+            <input type="radio" name="display" value="0" title="不显示" th:checked="${sysMenu.display eq 0}">
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label">类型：</label>
+        <div class="layui-input-inline">
+            <select name="type" lay-verify="verify">
+                <option value="1" th:selected="${sysMenu.type eq 1}" >系统固定菜单</option>
+                <option value="2" th:selected="${sysMenu.type eq 2}">业务菜单</option>
+            </select>
+        </div>
+    </div>
+
+    <div  class="layui-form-item">
+        <div class="layui-input-block">
+
+            <input id="formSubmit" type="button" class="layui-btn layui-btn-sm layui-btn-normal" value="提交">
+            <!-- <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>-->
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</div>
+</body>
+<script th:inline="javascript">
+    layui.use(['layer','form'],function () {
+        var layer=layui.layer;
+        var form =layui.form;
+        var $=layui.jquery;
+
+        $("#formSubmit").click(function(){
+           var formData = form.val("form");
+           $.ajax({
+               url:ctx+"sys/sysMenu/addOrEdit",
+               type:"post",
+               data:formData,
+               dataType:"json",
+               success:function (res) {
+                   if(res.success){
+                       layer.open({
+                           title:"成功",
+                           content:"添加成功"
+                       });
+                   }else{
+                       layer.open({
+                           title:"失败",
+                           content:"添加失败"
+                       });
+                   }
+               }
+           })
+
+        });
+        
+
+
+
+    })
+
+</script>
+</html>
